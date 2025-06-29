@@ -1,0 +1,324 @@
+@import url('https://fonts.googleapis.com/css2?family=Raleway:wght@400;600;700&display=swap');
+body {
+  font-family: 'Raleway', sans-serif;
+}
+/* swatch-input lives in its own file for reusability of the swatch in other areas than the product form context */
+.swatch-input__input + .swatch-input__label {
+  --swatch-input--border-radius: 50%;
+  display: inline-block;
+  max-width: 100%;
+  border-radius: var(--swatch-input--border-radius);
+  cursor: pointer;
+  outline-offset: 0.2rem;
+  outline-color: transparent;
+  outline-style: solid;
+  transition-property: outline-color, outline-width, box-shadow;
+  transition-duration: var(--duration-short);
+  transition-timing-function: ease;
+  forced-color-adjust: none;
+}
+
+.swatch-input__input + .swatch-input__label.swatch-input__label--square {
+  --swatch-input--border-radius: 0.2rem;
+}
+
+/* Active state */
+.swatch-input__input:active + .swatch-input__label,
+.swatch-input__input:checked + .swatch-input__label {
+  outline: 0.1rem solid rgb(var(--color-foreground));
+}
+
+/* Hover state */
+.swatch-input__input + .swatch-input__label:hover,
+.swatch-input__input:hover + .swatch-input__label {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.4);
+}
+
+/* Focus visible */
+.swatch-input__input:focus-visible + .swatch-input__label {
+  outline: 0.2rem solid rgba(var(--color-foreground), 0.5);
+  box-shadow: 0 0 0 0.2rem rgb(var(--color-background)), 0 0 0.1rem 0.5rem rgba(var(--color-foreground), 0.25);
+}
+
+/* Active and focused */
+.swatch-input__input:active:focus-visible + .swatch-input__label,
+.swatch-input__input:checked:focus-visible + .swatch-input__label {
+  outline: 0.1rem solid rgb(var(--color-foreground));
+  box-shadow: 0 0 0 0.2rem rgb(var(--color-background)), 0 0 0.1rem 0.4rem rgba(var(--color-foreground), 0.25);
+}
+
+/* Visually disabled */
+.swatch-input__input.visually-disabled:not(:active):not(:checked) + .swatch-input__label {
+  transition: none;
+}
+.swatch-input__input.visually-disabled:not(:active):not(:checked) + .swatch-input__label:hover {
+  outline: none;
+}
+
+/* Actually disabled */
+.swatch-input__input:disabled + .swatch-input__label {
+  pointer-events: none;
+}
+
+/* Overrides for swatch snippet when used inside disabled swatch-input */
+.swatch-input__input:disabled + .swatch-input__label > .swatch,
+.swatch-input__input.visually-disabled + .swatch-input__label > .swatch {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Disabled styles */
+.swatch-input__input:disabled + .swatch-input__label > .swatch,
+.swatch-input__input.visually-disabled + .swatch-input__label > .swatch {
+  opacity: 0.4;
+}
+
+/* Display crossed out line over swatch when input is disabled */
+.swatch-input__input:disabled + .swatch-input__label > .swatch::after,
+.swatch-input__input.visually-disabled + .swatch-input__label > .swatch::after {
+  /* Diagonal of a square = length of the side * sqrt(2)  */
+  --diagonal--size: calc(var(--swatch-input--size) * 1.414);
+  --crossed-line--size: 0.1rem;
+  content: '';
+  position: absolute;
+  bottom: calc(var(--crossed-line--size) * -0.5);
+  left: 0;
+  width: var(--diagonal--size);
+  height: var(--crossed-line--size);
+  background-color: rgb(var(--color-foreground));
+  transform: rotate(-45deg);
+  transform-origin: left;
+}
+
+/* Swatch label styles */
+.swatch-label {
+  display: inline-block;
+  text-align: center;
+  cursor: pointer;
+}
+/* Swatch image text */
+.swatch-image {
+  width: 66px;
+  height: 99px;
+  background-size: cover;
+  background-position: top;
+  background-repeat: no-repeat;
+  display: inline-block;
+  margin: 0 4px;
+  border-radius: 5px 5px 0px 0px;
+
+  border-style: solid;
+  border-bottom-width: 0.5px;
+  border-left-width: 0;
+  border-right-width: 0;
+  border-top-width: 0;
+  border-color: #e5e5e5;
+}
+.swatch-label-text {
+  display: block;
+  font-size: 10px;
+  margin-top: -10px;
+  text-align: left;
+  margin-left: 4px;
+  padding-left: 3px;
+
+  background-color: rgb(255, 255, 255);
+  border-radius: 0px 0px 8px 8px;
+
+  transition: background-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+.swatch-label--active .swatch-label-text {
+  background-color: rgb(0, 0, 0);
+  color: #ffffff;
+  border-radius: 0px 0px 8px 8px;
+  margin-right: 4px;
+  margin-left: 4px;
+  font-size: 10px;
+  padding-bottom: 1px;
+}
+/* Hover state for swatch label */
+.swatch-label:hover .swatch-label-text {
+  background-color: rgb(255, 255, 255);
+  color: rgb(0, 0, 0);
+  border-radius: 0px 0px 8px 8px;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.12);
+
+  margin-right: 4px;
+  margin-left: 4px;
+
+  padding-bottom: 1px;
+}
+
+/* Swatch carousel styles */
+/* This is a custom carousel for swatches, allowing horizontal scrolling of swatch items */
+.swatch-carousel-wrapper {
+  position: relative;
+  overflow: hidden;
+  width: 425px;
+  height: auto;
+}
+
+/* Swatch carousel container */
+.swatch-carousel {
+  display: flex;
+  flex-direction: row;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+  gap: 3px;
+  height: 125px;
+  scroll-padding-right: 36px;
+}
+
+/* Swatch item styles */
+.carousel-track {
+  display: flex;
+  flex-direction: row;
+  gap: 8px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+}
+
+.swatch-item {
+  flex: 0 0 auto;
+  width: 66px;
+}
+
+.carousel-arrow {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: rgba(255, 255, 255, 0.8);
+  border: none;
+  padding: 0.5rem;
+  cursor: pointer;
+}
+
+.carousel-arrow--left,
+.carousel-arrow--right {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  width: 36px;
+  height: 36px;
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.carousel-arrow--left {
+  left: -18px;
+}
+
+.carousel-arrow--right {
+  right: -18px;
+}
+.swatch-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.swatch-carousel {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.carousel-arrow--left svg {
+  margin-left: 8px;
+}
+.carousel-arrow--right svg {
+  margin-right: 8px;
+}
+
+/* Styles for the selected option text (Active State)*/
+.selected-option {
+  color: black;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.3em;
+  font-style: normal;
+  font-size: 12px;
+  width: 100%;
+  display: block;
+}
+
+.swatch-item {
+  position: relative;
+}
+.swatch-label--out {
+  opacity: 0.4;
+  position: relative;
+}
+.swatch-label--out .swatch-label-text {
+  background-color: rgba(54, 54, 54, 0.055);
+  color: rgb(0, 0, 0);
+  border-radius: 0px 0px 8px 8px;
+
+  margin-right: 4px;
+  margin-left: 4px;
+
+  padding-bottom: 1px;
+}
+.swatch-label--out:hover .swatch-label-text {
+  background-color: rgba(54, 54, 54, 0.055);
+}
+
+/* Badge styles for swatch items */
+.badge-out {
+  position: absolute;
+  bottom: 24px;
+  left: 6px;
+  background: #121212;
+  color: #fff;
+  padding: 0 8px;
+  z-index: 2;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 2px 0px 0px 2px;
+  text-transform: uppercase;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 87%;
+}
+
+.badge-new {
+  position: absolute;
+  bottom: 33px;
+  left: 6px;
+  background: #121212;
+  color: #fff;
+  padding: 0 8px;
+  z-index: 2;
+  font-size: 10px;
+  font-weight: 600;
+  border-radius: 2px;
+  text-transform: uppercase;
+}
+
+/* Responsive styles for the swatch carousel */
+@media screen and (max-width: 1275px) {
+  .swatch-carousel-wrapper {
+    width: 327px;
+  }
+}
+@media screen and (max-width: 458px) {
+  .swatch-carousel-wrapper {
+    width: 325px;
+  }
+}
+@media screen and (max-width: 332px) {
+  .swatch-carousel-wrapper {
+    width: 287px;
+  }
+}
+@media screen and (max-width: 312px) {
+  .swatch-carousel-wrapper {
+    width: 250px;
+  }
+}
