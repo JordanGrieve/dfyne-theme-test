@@ -15,6 +15,14 @@ Replicate the **color variant picker** component from this live product:
 
 ---
 
+### 📋 Main Files Edited or Created:
+
+- snippets/variant-picker.liquid
+- assets/swatch-carousel.js
+- assets/component-swatch-input.css
+
+---
+
 This allowed me to achieve the desired **color variant picker**
 
 ![Variant Picker Demo](dawn/assets/Animation.gif)
