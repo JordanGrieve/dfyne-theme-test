@@ -17,4 +17,4 @@ Replicate the **color variant picker** component from this live product:
 
 This allowed me to achieve the desired **color variant picker**
 
-![Variant Picker Demo](dawn/assets/variant-picker.gif)
+![Variant Picker Demo](dawn/assets/Animation.gif)
